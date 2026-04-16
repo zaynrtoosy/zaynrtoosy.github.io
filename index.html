@@ -321,10 +321,12 @@
         .cin-davinci { font-size: 0.8rem; color: var(--text-muted); opacity: 0.75; margin-bottom: 2.5rem; letter-spacing: 0.02em; }
         .cin-category { margin-bottom: 3rem; text-align: left; }
         .cin-cat-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
-        .video-grid { display: grid; gap: 1.4rem; }
+        .video-grid { display: grid; gap: 1.4rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
         .video-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.25s; }
         .video-item:hover { border-color: rgba(201,164,104,0.3); }
-        .video-item video { width: 100%; height: auto; display: block; max-height: 520px; background: #000; }
+        .video-wrapper { position: relative; padding-top: 56.25%; background: #000; }
+        .video-wrapper--shorts { padding-top: 177.78%; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .video-label { padding: 0.75rem 1.2rem; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border); }
         .cin-empty { padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.84rem; border: 1px dashed var(--border); border-radius: 10px; }
 
@@ -768,7 +770,7 @@ const PROJECT_DATA = {
             { type: 'video', src: 'videos/hardware5website.mp4', label: 'Initial Design Iteration — Animation' },
         ],
         cadLinks: [
-            { id: 'hardware5', label: 'Hardware 5 — Initial Design' },
+            { id: 'hardware5', label: 'Augmented Reality Tool Preliminary Design' },
         ]
     },
     plantpot: {
@@ -851,15 +853,15 @@ const VIDEO_CATEGORIES = [
     {
         name: 'Edits',
         videos: [
-            { src: 'videos/edits/1000miles1080_30.mp4',           label: '1000 Miles - Dolomites' },
-            { src: 'videos/edits/AmericanFootball1080pFinal.mp4', label: 'American Football' },
-            { src: 'videos/edits/NAwestPart1.MP4',                label: '2000 miles North America West Coast — Part 1' },
-            { src: 'videos/edits/NAWestCoastPart2.MP4',           label: '2000 miles North America West Coast — Part 2' },
-            { src: 'videos/edits/NAWestCoastPart3.MP4',           label: '2000 miles North America West Coast — Part 3' },
-            { src: 'videos/edits/rio.MP4',                        label: 'Rio' },
-            { src: 'videos/edits/skibiditrip.MP4',                label: 'Unemployed' },
-            { src: 'videos/edits/snow3.MP4',                      label: 'Snow' },
-            { src: 'videos/edits/VWlandscape.mp4',                label: 'VWs' },
+            { src: 'https://www.youtube.com/embed/MXmHt39-6m4',  label: '1000 Miles - Dolomites' },
+            { src: 'https://www.youtube.com/embed/SCYBNB2f4Dc',  label: 'American Football' },
+            { src: 'https://www.youtube.com/embed/qtu4CcG_6uY',  label: '2000 miles North America West Coast — Part 1', shorts: true },
+            { src: 'https://www.youtube.com/embed/cqZPiVJ7HOA',  label: '2000 miles North America West Coast — Part 2', shorts: true },
+            { src: 'https://www.youtube.com/embed/bpZETUPZ9tg',  label: '2000 miles North America West Coast — Part 3', shorts: true },
+            { src: 'https://www.youtube.com/embed/t5jUx18EXA4',  label: 'Rio',        shorts: true },
+            { src: 'https://www.youtube.com/embed/jIyI_Hn7f2I',  label: 'Unemployed', shorts: true },
+            { src: 'https://www.youtube.com/embed/yIznZ_xyN5I',  label: 'Snow',       shorts: true },
+            { src: 'https://www.youtube.com/embed/w9HsYVjYDAc',  label: 'VWs' },
         ]
     },
     {
@@ -954,9 +956,11 @@ VIDEO_CATEGORIES.forEach(cat => {
             const item = document.createElement('div');
             item.className = 'video-item';
             item.innerHTML = `
-                <video controls muted playsinline preload="metadata">
-                    <source src="${v.src}" type="video/mp4">
-                </video>
+                <div class="video-wrapper${v.shorts ? ' video-wrapper--shorts' : ''}">
+                    <iframe src="${v.src}" frameborder="0" allowfullscreen loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+                    </iframe>
+                </div>
                 <p class="video-label">${v.label}</p>`;
             grid.appendChild(item);
         });
